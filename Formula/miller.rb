@@ -21,7 +21,7 @@ class Miller < Formula
 
   def install
     system "autoreconf", "-fvi" if build.head?
-    system "./configure", "--prefix=#{prefix}", "--disable-silent-rules",
+    system "./configure", "--prefix=#{prefix}",
                           "--disable-dependency-tracking"
     system "make"
     system "make", "check"
