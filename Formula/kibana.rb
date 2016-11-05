@@ -83,7 +83,7 @@ class Kibana < Formula
   def caveats; <<-EOS.undent
     Config: #{etc}/kibana/
     If you wish to preserve your plugins upon upgrade, make a copy of
-    #{prefix}/installedPlugins before upgrading, and copy it into the
+    #{opt_prefix}/installedPlugins before upgrading, and copy it into the
     new keg location after upgrading.
     EOS
   end
