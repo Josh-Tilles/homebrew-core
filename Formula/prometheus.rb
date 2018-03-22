@@ -25,6 +25,37 @@ class Prometheus < Formula
     etc.install "documentation/examples/prometheus.yml"  # this file is included in the official minimal precompiled downloads
     libexec.install %w[consoles console_libraries]
   end
+  
+  plist_options :manual => "prometheus --config.file=#{HOMEBREW_PREFIX}/etc/prometheus.yml --web.console.templates=#{libexec}/consoles --web.console.libraries=#{libexec}/console_libraries"
+
+  def plist; <<~EOS
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+      <dict>
+        <key>KeepAlive</key>
+        <false/>
+        <key>Label</key>
+        <string>#{plist_name}</string>
+        <key>ProgramArguments</key>
+        <array>
+          <string>#{opt_bin}/prometheus</string>
+          <string>--config.file=#{etc}/prometheus.yml</string>
+          <string>--web.console.templates=#{libexec}/consoles</string>
+          <string>--web.console.libraries=#{libexec}/console_libraries</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>WorkingDirectory</key>
+        <string>#{var}/prometheus</string>
+        <key>StandardErrorPath</key>
+        <string>#{var}/log/prometheus.stderr.log</string>
+        <key>StandardOutPath</key>
+        <string>#{var}/log/prometheus.stdout.log</string>
+      </dict>
+    </plist>
+   EOS
+  end
 
   test do
     (testpath/"rules.example").write <<~EOS
