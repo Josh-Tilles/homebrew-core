@@ -20,6 +20,9 @@ class Prometheus < Formula
 
     system "make", "build"
     bin.install %w[promtool prometheus]
+    #(etc/"prometheus").mkpath
+    #(etc/"prometheus").install "documentation/examples/prometheus.yml"  # this file is included in the official minimal precompiled downloads
+    etc.install "documentation/examples/prometheus.yml"  # this file is included in the official minimal precompiled downloads
     libexec.install %w[consoles console_libraries]
   end
 
