@@ -26,6 +26,10 @@ class Prometheus < Formula
     libexec.install %w[consoles console_libraries]
   end
   
+  def post_install
+    (var/"prometheus").mkdir
+  end
+
   plist_options :manual => "prometheus --config.file=#{HOMEBREW_PREFIX}/etc/prometheus.yml --web.console.templates=#{HOMEBREW_PREFIX}/opt/prometheus/libexec/consoles --web.console.libraries=#{HOMEBREW_PREFIX}/libexec/console_libraries"
 
   def plist; <<~EOS
