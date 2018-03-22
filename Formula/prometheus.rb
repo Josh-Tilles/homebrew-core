@@ -26,7 +26,7 @@ class Prometheus < Formula
     libexec.install %w[consoles console_libraries]
   end
   
-  plist_options :manual => "prometheus --config.file=#{HOMEBREW_PREFIX}/etc/prometheus.yml --web.console.templates=#{libexec}/consoles --web.console.libraries=#{libexec}/console_libraries"
+  plist_options :manual => "prometheus --config.file=#{HOMEBREW_PREFIX}/etc/prometheus.yml --web.console.templates=#{HOMEBREW_PREFIX}/opt/prometheus/libexec/consoles --web.console.libraries=#{HOMEBREW_PREFIX}/libexec/console_libraries"
 
   def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
@@ -41,8 +41,8 @@ class Prometheus < Formula
         <array>
           <string>#{opt_bin}/prometheus</string>
           <string>--config.file=#{etc}/prometheus.yml</string>
-          <string>--web.console.templates=#{libexec}/consoles</string>
-          <string>--web.console.libraries=#{libexec}/console_libraries</string>
+          <string>--web.console.templates=#{prefix}/libexec/consoles</string>
+          <string>--web.console.libraries=#{prefix}/libexec/console_libraries</string>
         </array>
         <key>RunAtLoad</key>
         <true/>
