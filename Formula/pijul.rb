@@ -4,18 +4,11 @@ class Pijul < Formula
   url "https://crates.io/api/v1/crates/pijul/0.10.1/download"
   sha256 "042ba7e96730dd90eab53db243ee7e6f0c93aa4123450f279c2f58ba5b7caf18"
 
-  option "with-static-sodium", "Link `libsodium` dependency statically"
-
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
-  if build.with? "static-sodium"
-    depends_on "libsodium" => :build
-  else
-    depends_on "libsodium"
-  end
+  depends_on "libsodium"
 
   def install
-    ENV["SODIUM_STATIC"] = 1 if build.with? "static-sodium"
     system "cargo", "install", "--root=#{prefix}", "--verbose"
   end
 
