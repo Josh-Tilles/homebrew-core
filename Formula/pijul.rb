@@ -7,6 +7,7 @@ class Pijul < Formula
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
   depends_on "libsodium"
+  depends_on "openssl"
 
   def install
     system "cargo", "install", "--root=#{prefix}", "--verbose"
