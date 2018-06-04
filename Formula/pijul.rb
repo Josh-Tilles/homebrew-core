@@ -15,7 +15,7 @@ class Pijul < Formula
     ENV["OPENSSL_DIR"] = Formula["openssl"].opt_prefix
 
     cd "pijul" do
-      system "cargo", "install", "--root=#{prefix}", "--verbose"
+      system "cargo", "install", "--root", prefix
     end
   end
 
