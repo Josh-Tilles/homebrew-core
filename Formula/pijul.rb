@@ -1,8 +1,8 @@
 class Pijul < Formula
   desc "Patch-based distributed version control system, easy to use and fast"
   homepage "https://pijul.org"
-  url "https://crates.io/api/v1/crates/pijul/0.10.1/download"
-  sha256 "042ba7e96730dd90eab53db243ee7e6f0c93aa4123450f279c2f58ba5b7caf18"
+  url "https://pijul.org/releases/pijul-0.10.0.tar.gz"
+  sha256 "da3fcba4ab39a4371cda7273691364c2355c9b216bb7867d92dae5812ebb71d2"
 
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
@@ -14,7 +14,9 @@ class Pijul < Formula
     # (If we’re not careful, LibreSSL or OpenSSL 1.1 gets used instead.)
     ENV["OPENSSL_DIR"] = Formula["openssl"].opt_prefix
 
-    system "cargo", "install", "--root=#{prefix}", "--verbose"
+    cd "pijul" do
+      system "cargo", "install", "--root=#{prefix}", "--verbose"
+    end
   end
 
   test do
