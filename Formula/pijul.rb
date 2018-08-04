@@ -1,5 +1,5 @@
 class Pijul < Formula
-  desc "Patch-based distributed version control system, easy to use and fast"
+  desc "Patch-based distributed version control system"
   homepage "https://pijul.org"
   url "https://pijul.org/releases/pijul-0.10.0.tar.gz"
   sha256 "da3fcba4ab39a4371cda7273691364c2355c9b216bb7867d92dae5812ebb71d2"
