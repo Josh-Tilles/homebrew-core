@@ -13,6 +13,7 @@ class Pijul < Formula
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
   depends_on "libsodium"
+  depends_on "nettle"
   depends_on "openssl"
 
   def install
