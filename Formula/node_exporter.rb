@@ -1,8 +1,8 @@
 class NodeExporter < Formula
   desc "Prometheus exporter for machine metrics"
   homepage "https://prometheus.io/"
-  url "https://github.com/prometheus/node_exporter/archive/v0.16.0.tar.gz"
-  sha256 "2ed1c1c199e047b1524b49a6662d5969936e81520d6613b8b68cc3effda450cf"
+  url "https://github.com/prometheus/node_exporter/archive/v0.17.0.tar.gz"
+  sha256 "763b588b9282a8aa497286f8ab1aab61d085bdd2d258cf3457f23c60752c9a27"
 
   bottle do
     cellar :any_skip_relocation
@@ -14,13 +14,30 @@ class NodeExporter < Formula
 
   depends_on "go" => :build
 
+  resource "promu" do
+    # check and update upon next release
+    # (matches <https://github.com/prometheus/node_exporter/blob/v0.17.0/Makefile.common#L68-L69>)
+    url "https://github.com/prometheus/promu/releases/download/v0.2.0/promu-0.2.0.darwin-amd64.tar.gz"
+    sha256 "6372caea7d8e7c0f208f6c040e2bfb462c72c9f7b2f6c13b7992d7caa5fbcf75"
+  end
+
+  # Fix checksum mismatch of `soundcloud/go-runit@v0.0.0-20150630195641-06ad41a06c4a`.
+  patch do
+    url "https://github.com/prometheus/node_exporter/commit/97dab59e18c575d1384a9afd54e9f30473f34322.patch?full_index=1"
+    sha256 "a581e7304823fecc0a5dd71ce27ba66add9665bad702ced837b63f1eda4c5082"
+  end
+
   def install
-    ENV["GOPATH"] = buildpath
-    (buildpath/"src/github.com/prometheus").mkpath
-    ln_s buildpath, "src/github.com/prometheus/node_exporter"
-    system "go", "build", "-o", bin/"node_exporter", "-ldflags",
-           "-X github.com/prometheus/node_exporter/vendor/github.com/prometheus/common/version.Version=#{version}",
-           "github.com/prometheus/node_exporter"
+    system "make", "test"
+
+    # Trick build into using our checksummed `promu`.
+    resource("promu").stage do
+      gopath = `go env GOPATH`.chomp
+      Pathname.new("#{gopath}/bin").install "./promu"
+    end
+
+    system "make", "build", "PREFIX=#{bin}"
+    prefix.install_metafiles
   end
 
   def caveats; <<~EOS
