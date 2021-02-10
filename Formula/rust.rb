@@ -2,7 +2,7 @@ class Rust < Formula
   desc "Safe, concurrent, practical language"
   homepage "https://www.rust-lang.org/"
   license any_of: ["Apache-2.0", "MIT"]
-  revision 1
+  revision 2
 
   stable do
     url "https://static.rust-lang.org/dist/rustc-1.49.0-src.tar.gz"
@@ -10,8 +10,8 @@ class Rust < Formula
 
     resource "cargo" do
       url "https://github.com/rust-lang/cargo.git",
-          tag:      "0.50.0",
-          revision: "d00d64df9f803bf5bba8714ca498d8f9159d07f6"
+          tag:      "0.50.1",
+          revision: "d61c808dda8029721042618f22e8e15d01328af4"
     end
   end
 
