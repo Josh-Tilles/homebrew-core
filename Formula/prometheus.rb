@@ -20,12 +20,40 @@ class Prometheus < Formula
   depends_on "node" => :build
   depends_on "yarn" => :build
 
+  resource "promu" do
+    url "https://github.com/prometheus/promu.git",
+        tag:      "v0.7.0",
+        revision: "b17dc4f71c810678db907367b392a3e7a14c4038"
+  end
+
   def install
     mkdir_p buildpath/"src/github.com/prometheus"
     ln_sf buildpath, buildpath/"src/github.com/prometheus/prometheus"
 
     system "make", "assets"
-    system "make", "build"
+
+    promu = buildpath/"libexec/bin/promu"
+
+    resource("promu").stage do
+      ldflags = %W[
+        -s
+        -X github.com/prometheus/common/version.Version=#{version}
+        -X github.com/prometheus/common/version.Revision=#{`git rev-parse HEAD`}
+        -X github.com/prometheus/common/version.Branch=HEAD
+        -X github.com/prometheus/common/version.BuildDate=#{DateTime.now.strftime("%Y%m%d-%H:%M:%S")}
+      ].join(" ")
+
+      promu_go_args = std_go_args.map { |arg| arg == bin/name ? promu : arg }
+
+      system "go", "build", *promu_go_args, "-ldflags", ldflags
+
+      # de facto `make installcheck`
+      system promu, "version"
+      system promu, "info"
+      system promu, "build", "--verbose"
+    end
+
+    system "make", "build", "PROMU=#{promu}"
     bin.install %w[promtool prometheus]
     libexec.install %w[consoles console_libraries]
 
