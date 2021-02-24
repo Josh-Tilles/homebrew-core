@@ -20,6 +20,7 @@ class Ffsend < Formula
   end
 
   def install
+    system "cargo", "update", "--package=ring"
     system "cargo", "install", *std_cargo_args
 
     bash_completion.install "contrib/completions/ffsend.bash"
