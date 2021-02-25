@@ -127,7 +127,7 @@ class Semgrep < Formula
       ENV["PREFIX"] = prefix
 
       system "opam", "init", "--no-setup", "--disable-sandboxing"
-      ENV.deparallelize { system "opam", "switch", "create", "ocaml-base-compiler.4.10.0" }
+      ENV.deparallelize { system "opam", "switch", "create", "ocaml-base-compiler.#{Formula["ocaml"].version}" }
 
       system "opam", "exec", "--", "make", "setup"
 
